@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="crm_dashboard_action" model="ir.actions.client">
+        <field name="name">CRM Dashboard</field>
+        <field name="tag">crm_dashboard_tag</field>
+    </record>
+    <menuitem name="Dashboard" id="crm_dashboard"
+              sequence="0" action="crm_dashboard_action"
+              parent="crm.crm_menu_root"/>
+</odoo>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="crm_dashboard.CrmDashboard">
+        <div class="">
+            <div>
+                <div class="row main-section" style="padding:20px;">
+                    <!--            Lead Tile-->
+                    <div id="leads" class="col-md-4 col-sm-6 tot_tasks oh-payslip"
+                         style="padding-top: 30px;">
+                        <div class="oh-card" style="box-shadow:2px 4px 8px 2px rgba(0,0,0.3,0.2);
+                display: flex; justify-content: center;" role="button">
+                            <div class="oh-card-body"
+                                 style="padding: 5px 5px; float: left; width: 100%;
+                          height: auto; box-sizing: border-box; margin: 0;">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon bg-mauve-light d-flex justify-content-left align-items-left">
+                                        <div style="background:#ff4d94; width:65px; text-align: center;">
+                                            <i class="fa fa-tasks text-mauve"
+                                               style="font-size:50px;"/>
+                                        </div>
+                                        <div class="stat_content" style="
+                                  text-align: center; font-weight: bold;
+                                  padding-top: 20px; padding-left: 80px;">
+                                            <div class="stat_count_lead"
+                                                 style="font-size: 17px;">
+                                                <span id="templates">
+                                                    <div id="my_lead"/>
+                                                </span>
+                                            </div>
+                                            <div class="stat-head"
+                                                 style="font-size: 14px;">My Leads
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--       Opportunity Tile-->
+                    <div id="opportunity" class="col-md-4 col-sm-6 tot_tasks oh-payslip"
+                         style="padding-top: 30px;">
+                        <div class="oh-card" style="box-shadow:2px 4px 8px 2px rgba(0,0,0.3,0.2);
+                display: flex; justify-content: center;" role="button">
+                            <div class="oh-card-body"
+                                 style="padding: 5px 5px; float: left; width: 100%;
+                          height: auto; box-sizing: border-box; margin: 0;">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon bg-mauve-light d-flex justify-content-left align-items-left">
+                                        <div style="background:yellow; width:65px; text-align: center;">
+                                            <i class="fa fa-trophy  text-mauve"
+                                               style="font-size:50px;"/>
+                                        </div>
+                                        <div class="stat-content" style="
+                                  text-align: center; font-weight: bold;
+                                  padding-top: 20px; padding-left: 80px;">
+                                            <div class="stat_count_opp"
+                                                 style="font-size: 17px;">
+                                                <span id="templates">
+                                                    <div id="my_opportunity"/>
+                                                </span>
+                                            </div>
+                                            <div class="stat-head"
+                                                 style="font-size: 14px;">My Opportunity
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--            Expected Revenue -->
+                    <div id="expected_revenue"
+                         class="col-md-4 col-sm-6 tot_tasks oh-payslip"
+                         style="padding-top: 30px;">
+                        <div class="oh-card" style="box-shadow:2px 4px 8px 2px rgba(0,0,0.3,0.2);
+                display: flex; justify-content: center;" role="button">
+                            <div class="oh-card-body"
+                                 style="padding: 5px 5px; float: left; width: 100%;
+                          height: auto; box-sizing: border-box; margin: 0;">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon bg-mauve-light d-flex justify-content-left align-items-left">
+                                        <div style="background:#bf80ff;; width:65px; text-align: center;">
+                                            <i class="fa fa-usd  text-mauve"
+                                               style="font-size:50px;"/>
+                                        </div>
+                                        <div class="stat-content" style="
+                                  text-align: center; font-weight: bold;
+                                  padding-top: 20px; padding-left: 80px;">
+                                            <div class="stat_count_ex_rev"
+                                                 style="font-size: 17px;">
+                                                <span id="templates">
+                                                    <div id="revenue"/>
+                                                </span>
+                                            </div>
+                                            <div class="stat-head"
+                                                 style="font-size: 14px;">Expected
+                                                revenue
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
