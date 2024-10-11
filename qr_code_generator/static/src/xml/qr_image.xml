@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<t t-name="qr_code_generator.qr_image">
+    <div>
+        <br/>
+        <img t-attf-src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data={{text}}" style="height:142px;" id="qr_img"/>
+    </div>
+</t>

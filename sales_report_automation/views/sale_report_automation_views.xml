@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sale_report_automation_form_views" model="ir.ui.view">
+        <field name="name">sale.report.automation.form.views</field>
+        <field name="model">sale.report.automation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable':'1'}"/>
+                    <button name="action_print_sale_pdf_report" string="Print PDF" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <field name="sales_team_id" options="{'no_create' : True}"/>
+                        <field name="partner_ids" options="{'no_create' : True}" widget="many2many_tags"/>
+                        <field name="report_type"/>
+                        <field name="from_date"/>
+                        <field name="to_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale__report_automation_tree_views" model="ir.ui.view">
+        <field name="name">sale.report.automation.tree.views</field>
+        <field name="model">sale.report.automation</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sales_team_id" options="{'no_create' : True}"/>
+                <field name="partner_ids" options="{'no_create' : True}" widget="many2many_tags"/>
+                <field name="report_type"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sale_report_automation_action" model="ir.actions.act_window">
+        <field name="name">Sale PDF Report</field>
+        <field name="res_model">sale.report.automation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="sale_report_automation_menu" action="sale_report_automation_action" name="Sale Report Automation"
+              parent="sale.menu_sale_report"/>
+</odoo>

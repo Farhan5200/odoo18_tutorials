@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<t t-name="qr_code_generator.qr_generator_modal">
+    <center>
+    <div style="width:50%;height:50%;padding:10px;">
+        <input type="text" id="input_box" class="form-control"  placeholder="Give some input...."/>
+        <span id="error" style="color:red;display:none;"><br/>Give some input....<br/></span>
+        <div id="qr_code">
+
+        </div>
+        <br/>
+        <button t-on-click="generate_qr" class="btn btn-primary">Generate</button>
+        <button t-on-click="reset_btn" class="ms-2 btn btn-danger">Reset</button>
+        <button t-on-click="print_qr" class="ms-2 btn btn-success" id="print_btn" style="display:none;">Save</button>
+    </div>
+    </center>
+</t>

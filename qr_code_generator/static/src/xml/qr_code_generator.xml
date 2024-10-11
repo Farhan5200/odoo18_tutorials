@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<t t-name="qr_code_generator.QRMenu"
+   t-inherit="mail.MessagingMenu"
+   t-inherit-mode="extension">
+    <xpath expr="//Dropdown" position="before">
+        <i id="qr_menu" t-on-click="generate_qr" class="fa fa-qrcode" style="color:white;padding:13px;margin-bottom:10px;font-size: 1.5em;"/>
+    </xpath>
+</t>

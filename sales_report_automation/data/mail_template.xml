@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="sale_report_mail_template" model="mail.template">
+            <field name="name">Sale Report</field>
+            <field name="model_id" ref="model_sale_report_automation"/>
+            <field name="email_from">{{ object.company_id.email }}</field>
+            <field name="subject">Sales Report {{ ctx.get('context',{}).get('from_date','') }} to {{ ctx.get('context',{}).get('to_date','') }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear <t t-out="ctx.get('context',{}).get('partner_name','')"/>,
+                        This is your <span t-out="ctx.get('context',{}).get('report_type','')"/> Sales report starting from
+                        <span t-out="ctx.get('context',{}).get('from_date','')"/> to <span t-out="ctx.get('context',{}).get('to_date','')"/>
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="client_qr_generator_modal" model="ir.actions.client">
+        <field name="name">QR Generator Modal</field>
+        <field name="tag">qr_generator_modal</field>
+    </record>
+</odoo>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_template_view_form" model="ir.ui.view">
+        <field name="name">project.template.view.form</field>
+        <field name="model">project.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                <button type="object" name="action_create_project" class="oe_highlight" string="Create Project"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex flex-row">
+                            <field name="name" options="{'line_breaks': False}" widget="text" class="o_text_overflow"
+                                   placeholder="e.g. Office Party"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="label_tasks" string="Name of the Tasks" placeholder="e.g. Tasks"/>
+                            <field name="partner_id" class="ms-1" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'customer'}"
+                                   options="{'no_create_edit': True, 'no_open': True}"
+                                   placeholder="Select who to bill..." invisible="not allow_billable"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="user_id" string="Project Manager" widget="many2one_avatar_user"
+                                   domain="[('share', '=', False)]" options="{'no_quick_create': True}"/>
+                            <field name="date_start" string="Planned Date" widget="daterange"
+                                   options='{"end_date_field": "date", "always_range": "1"}'
+                                   required="date_start or date"/>
+                            <field name="date" invisible="1" required="date_start"/>
+<!--                            <field name="allocated_hours" widget="timesheet_uom_no_toggle"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="description" options="{'resizable': false}"
+                                   placeholder="Project description..."/>
+                        </page>
+                        <page name="settings" string="Settings">
+                            <group>
+                                <group>
+                                    <field name="privacy_visibility" widget="radio"/>
+                                    <span colspan="2" class="text-muted o_row ps-1"
+                                          invisible="access_instruction_message == ''">
+                                        <i class="fa fa-lightbulb-o"/>&amp;nbsp;
+                                        <field class="d-inline" name="access_instruction_message" nolabel="1"/>
+                                    </span>
+                                </group>
+                            </group>
+                            <group>
+                                <group name="group_tasks_managment" string="Tasks Management" col="1"
+                                       class="row mt16 o_settings_container">
+                                    <div>
+                                        <setting class="col-lg-12 ms-4" id="project_milestone_setting"
+                                                 help="Track major progress points that must be reached to achieve success">
+                                            <field name="allow_milestones"/>
+                                        </setting>
+                                    </div>
+                                </group>
+<!--                                <group name="group_time_managment" string="Time Management" col="1"-->
+<!--                                       class="row mt16 o_settings_container">-->
+<!--                                    <div>-->
+<!--                                        <setting class="col-lg-12 ms-4" id="project_timesheet_setting"-->
+<!--                                                 help="Log time on tasks">-->
+<!--                                            <field name="allow_timesheets"/>-->
+<!--                                        </setting>-->
+<!--                                    </div>-->
+<!--                                </group>-->
+                            </group>
+                            <group>
+                                <group name="group_sales_invoicing" string="Sales &amp; Invoicing" col="1"
+                                       class="row mt16 o_settings_container col-lg-6">
+                                    <div>
+                                        <setting class="col-lg-12 ms-4"
+                                                 help="Invoice your time and material to customers"
+                                                 id="allow_billable_container">
+                                            <field name="allow_billable"/>
+<!--                                            <div invisible="not allow_billable or not allow_timesheets"-->
+<!--                                                 class="text-muted">-->
+<!--                                                Timesheets without a sales order item are-->
+<!--                                                <br/>-->
+<!--                                                <field name="billing_type" nolabel="1"/>-->
+<!--                                            </div>-->
+                                        </setting>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Tasks">
+                            <field name="task_ids">
+                                <list editable="bottom" open_form_view="True">
+                                    <field name="name"/>
+                                    <field name="user_ids" widget="many2many_avatar_user"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="project_template_action" model="ir.actions.act_window">
+        <field name="name">Project Template</field>
+        <field name="res_model">project.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="project_templates_menu" name="Templates" parent="project.menu_project_config">
+        <menuitem id="project_template_menu" action="project_template_action" name="Project Templates"/>
+        <menuitem id="task_template_menu" action="task_template_action" name="Task Templates"/>
+    </menuitem>
+</odoo>

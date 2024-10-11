@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="sale_pdf_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2>
+                        <center>Sales Report</center>
+                    </h2>
+                </div>
+                <t t-foreach="selected_partner" t-as="partners">
+                    <t t-foreach="partner_id" t-as="all_partner">
+                        <t t-if="partners == all_partner.id">
+                            <b>Customer Name :
+                                <span t-esc="all_partner.name"/>
+                            </b>
+                            <br/>
+                            <b>Report Type :
+                                <span t-esc="interval_state[selected_interval]"/>
+                            </b>
+                            <br/>
+                            <b>From :
+                                <span t-esc="selected_from_date"/>
+                            </b>
+                            <br/>
+                            <b>To :
+                                <span t-esc="selected_to_date"/>
+                            </b>
+                            <table class="table table-sm o_main_table">
+                                <tr>
+                                    <th>Order Reference</th>
+                                    <th>Order Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                                <t t-foreach="docs" t-as="details">
+                                    <t t-if="all_partner.id == details.partner_id.id">
+                                        <tr>
+                                            <th>
+                                                <t t-esc="details.name"/>
+                                            </th>
+                                            <th>
+                                                <t t-esc="details.date_order"/>
+                                            </th>
+                                            <th>
+                                                <t t-esc="details.amount_total"/>
+                                            </th>
+                                            <th>
+                                                <t t-esc="selected_state[details.state]"/>
+                                            </th>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </table>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

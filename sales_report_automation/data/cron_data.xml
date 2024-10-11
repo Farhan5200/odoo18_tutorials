@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_send_sale_report" model="ir.cron">
+        <field name="name">Sale Report Automation</field>
+        <field name="model_id" ref="model_sale_report_automation"/>
+        <field name="state">code</field>
+        <field name="code">model.scheduled_action_send_mail()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+<!--        <field name="numbercall">-1</field>-->
+    </record>
+</odoo>
