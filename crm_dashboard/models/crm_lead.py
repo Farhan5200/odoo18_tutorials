@@ -8,6 +8,7 @@ class CrmLead(models.Model):
     @api.model
     def get_tiles_data(self):
         company_id = self.env.company
+        print(company_id)
         leads = self.search([('company_id', '=', company_id.id),
                              ('user_id', '=', self.env.user.id)])
         my_leads = leads.filtered(lambda r: r.type == 'lead')
