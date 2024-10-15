@@ -2,7 +2,7 @@
 import { registry } from "@web/core/registry";
 import { Component } from  "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
-import { onWillStart, useRef, onMounted } from "@odoo/owl";
+//import { onWillStart, useRef, onMounted } from "@odoo/owl";
 
 
 
@@ -24,29 +24,103 @@ class CrmDashboard extends Component {
         document.getElementById("templates_win_ratio").append(result.win_ratio);
         this.props.user_id = result.user_id
         this.props.company_id = result.company_id
-        this.load_charts()
+        this.load_doughnut_charts()
+        this.load_pie_charts()
+        this.load_doughnut_charts_campaign()
+        this.load_bar_chart()
    }
-   load_charts(){
-   var ctx = document.getElementById('template_lost_dough')
+
+   async load_doughnut_charts(){
+   const result = await this.orm.call('crm.lead','doughnut_chart_values',[],{})
+   var ctx = document.getElementById('template_doughnut')
         var chart = new Chart(ctx, {
         type: "doughnut",
         data: {
-            labels: [
-                'Red',
-                'Blue',
-                'Yellow'
-              ],
+            labels: result.medium_labels,
              datasets: [{
                backgroundColor:  [
                       'rgb(255, 99, 132)',
                       'rgb(54, 162, 235)',
-                      'rgb(255, 205, 86)'
+                      'rgb(255, 205, 86)',
+                      '#8fa0a8',
+                      '#873e23',
+                      '#151a13',
+                      '#eab573',
+                      '#1c416b',
+                      '#69bdd2',
+                      'rgb(223,200,162)'
                     ],
-                data: [20, 30, 40],
+                data: result.medium_count,
         }]
     },
-    options: {
-    }
+    });
+   }
+
+   async load_pie_charts(){
+   const result = await this.orm.call('crm.lead','pie_chart_values',[],{})
+   var ctx = document.getElementById('template_pie_chart')
+        var chart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: result.label_activity_type,
+             datasets: [{
+               backgroundColor:  [
+                      'rgb(255, 99, 132)',
+                      'rgb(54, 162, 235)',
+                      'rgb(255, 205, 86)',
+                      '#8fa0a8',
+                      '#873e23',
+                      '#151a13',
+                      '#eab573',
+                      '#1c416b',
+                      '#69bdd2',
+                      'rgb(223,200,162)'
+                    ],
+                data: result.label_activity_type_count,
+        }]
+    },
+    });
+   }
+
+   async load_doughnut_charts_campaign(){
+   const result = await this.orm.call('crm.lead','doughnut_chart_values_campaign',[],{})
+   var ctx = document.getElementById('template_doughnut_campaign')
+        var chart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: result.campaign_labels,
+             datasets: [{
+               backgroundColor:  [
+                      'rgb(255, 99, 132)',
+                      'rgb(54, 162, 235)',
+                      'rgb(255, 205, 86)',
+                      '#8fa0a8',
+                      '#873e23',
+                      '#151a13',
+                      '#eab573',
+                      '#1c416b',
+                      '#69bdd2',
+                      'rgb(223,200,162)'
+                    ],
+               data: result.campaign_count,
+        }]
+    },
+    });
+   }
+
+   async load_bar_chart(){
+        const result = await this.orm.call('crm.lead','bar_chart_values',[],{})
+        var ctx = document.getElementById('template_bar_chart')
+        var chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Lead", "Opportunity"],
+            datasets: [{
+                backgroundColor: "red",
+                label:'Lost',
+                data: result.lost_count
+            }]
+        },
     });
    }
    open_myLeads(){
@@ -61,8 +135,8 @@ class CrmDashboard extends Component {
                 domain:"[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'lead')]",
                 target: "main",
             });
-            console.log(this)
    }
+
    open_myOpportunity(){
         var company_id = this.props.company_id
         var user_id = this.props.user_id
@@ -75,7 +149,6 @@ class CrmDashboard extends Component {
                 domain:"[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'opportunity')]",
                 target: "main",
             });
-            console.log(this)
    }
 
 }

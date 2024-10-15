@@ -2,7 +2,7 @@
 <templates>
     <t t-name="crm_dashboard.CrmDashboard">
         <div class="" style="overflow-y: scroll;overflow-x: hidden;max-height:100vh;">
-            <div>
+            <div style="align-content: center;">
                 <div class="row" style="padding:20px;align-content: center;margin-left:70px;">
                     <div class="card card-body"
                          style="background-color:#EEF5FF;margin:20px;padding:15px;width: fit-content;min-width:14rem;height: 8rem;max-width:18rem;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px"
@@ -47,9 +47,51 @@
                         </center>
                     </div>
                 </div>
-                <div style="width:30%;height:30%;">
-                    <canvas id="template_lost_dough"/>
-                </div>
+                <center>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="card card-body"
+                                     style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
+                                    <h3 class="card-title">Leads By Medium</h3>
+                                    <canvas id="template_doughnut"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="card card-body"
+                                     style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
+                                    <h3 class="card-title">Activities</h3>
+                                    <canvas id="template_pie_chart"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="card card-body"
+                                     style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
+                                    <h3 class="card-title">Leads By Campaign</h3>
+                                    <canvas id="template_doughnut_campaign"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="card card-body"
+                                     style="width: fit-content;min-width:45rem;height:30rem;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
+                                    <h3 class="card-title">Lost Opportunity/Lead</h3>
+                                    <canvas id="template_bar_chart" width="45rem" height="27rem"
+                                            style="display: block; box-sizing: border-box; height: 30rem; width: 45rem;"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </center>
             </div>
         </div>
     </t>
