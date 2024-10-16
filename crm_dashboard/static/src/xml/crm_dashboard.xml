@@ -99,7 +99,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <div class="card card-body"
+                                <div class="card card-body" id="bar_chart"
                                      style="width: fit-content;min-width:65rem;height:30rem;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Lost Opportunity/Lead</h3>
                                     <canvas id="template_bar_chart" width="65rem" height="27rem"

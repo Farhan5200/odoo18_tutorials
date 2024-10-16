@@ -27,7 +27,7 @@ class CrmDashboard extends Component {
         this.load_doughnut_charts(selected_period)
         this.load_pie_charts(selected_period)
         this.load_doughnut_charts_campaign(selected_period)
-        this.load_bar_chart()
+        this.load_bar_chart(selected_period)
         this.load_table_values()
    }
 
@@ -129,9 +129,12 @@ class CrmDashboard extends Component {
     });
    }
 
-   async load_bar_chart(){
-        const result = await this.orm.call('crm.lead','bar_chart_values',[],{})
+   async load_bar_chart(selected_period){
+        const result = await this.orm.call('crm.lead','bar_chart_values',[selected_period],{})
         var ctx = document.getElementById('template_bar_chart')
+        ctx.remove()
+        document.getElementById('bar_chart').innerHTML = '<canvas id="template_bar_chart" width="65rem" height="27rem" style="display: block; box-sizing: border-box;"/>'
+        ctx = document.getElementById('template_bar_chart')
         var chart = new Chart(ctx, {
         type: "bar",
         data: {
