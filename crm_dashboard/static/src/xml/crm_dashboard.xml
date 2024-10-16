@@ -2,6 +2,31 @@
 <templates>
     <t t-name="crm_dashboard.CrmDashboard">
         <div class="" style="overflow-y: scroll;overflow-x: hidden;max-height:100vh;">
+            <div class="o_control_panel d-flex flex-column gap-3 px-3 pt-2 pb-3">
+                <div class="o_control_panel_main d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-lg-start gap-lg-3 flex-grow-1">
+                    <div class="o_control_panel_breadcrumbs d-flex align-items-center gap-1 order-0 h-lg-100">
+                        <div class="o_breadcrumb d-flex gap-1 text-truncate">
+                            <div class="o_last_breadcrumb_item active d-flex fs-4 min-w-0 align-items-center">
+                                <span class="min-w-0 text-truncate">Dashboards</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_control_panel_actions d-empty-none d-flex align-items-center justify-content-start justify-content-lg-around order-2 order-lg-1 w-100 w-lg-auto">
+                        <div class="o-filter-value d-flex align-items-start w-100">
+                            <div class="w-100">
+                                <select class="date_filter_values o_input me-3" id="selected_period" required="true" t-on-change="selected_period">
+                                    <option value="all">Select period...</option>
+                                    <option value="this_year">This Year</option>
+                                    <option value="this_quater">This Quater</option>
+                                    <option value="this_month">This Month</option>
+                                    <option value="this_week">This Week</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div style="align-content: center;">
                 <div class="row" style="padding:20px;align-content: center;margin-left:70px;">
                     <div class="card card-body"
@@ -51,21 +76,21 @@
                     <table>
                         <tr>
                             <td>
-                                <div class="card card-body"
+                                <div class="card card-body" id="doughnut_chart"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Leads By Medium</h3>
                                     <canvas id="template_doughnut"/>
                                 </div>
                             </td>
                             <td>
-                                <div class="card card-body"
+                                <div class="card card-body" id="pie_chart"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Activities</h3>
                                     <canvas id="template_pie_chart"/>
                                 </div>
                             </td>
                             <td>
-                                <div class="card card-body"
+                                <div class="card card-body" id="doughnut_chart_campaign"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Leads By Campaign</h3>
                                     <canvas id="template_doughnut_campaign"/>
@@ -75,10 +100,27 @@
                         <tr>
                             <td colspan="2">
                                 <div class="card card-body"
-                                     style="width: fit-content;min-width:45rem;height:30rem;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
+                                     style="width: fit-content;min-width:65rem;height:30rem;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Lost Opportunity/Lead</h3>
-                                    <canvas id="template_bar_chart" width="45rem" height="27rem"
-                                            style="display: block; box-sizing: border-box; height: 30rem; width: 45rem;"/>
+                                    <canvas id="template_bar_chart" width="65rem" height="27rem"
+                                            style="display: block; box-sizing: border-box;"/>
+                                </div>
+                            </td>
+                            <td colspan="1" style="vertical-align: top;">
+                                <div style="height:fit-content;max-height:25rem;margin:30px;vertical-align: top;padding:15px;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px;background-color:white;">
+                                    <h3 class="card-title">Leads by Month</h3>
+                                    <br/>
+                                    <table class="table" style="height:fit-content;max-height:25rem;">
+                                        <thead style="padding:15px;">
+                                            <tr>
+                                                <th>Month</th>
+                                                <th>Total Leads</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table_body" style="padding:15px;">
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </td>
                         </tr>

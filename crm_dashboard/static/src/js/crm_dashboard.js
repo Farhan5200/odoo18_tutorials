@@ -15,8 +15,8 @@ class CrmDashboard extends Component {
          this.action = useService("action")
          this._fetch_data()
    }
-   async _fetch_data(){
-        const result =await this.orm.call('crm.lead','get_tiles_data',[],{})
+   async _fetch_data(selected_period='all'){
+        const result =await this.orm.call('crm.lead','get_tiles_data',[selected_period],{})
         document.getElementById("my_lead").append(result.total_leads);
         document.getElementById("my_opportunity").append(result.total_opportunity);
         document.getElementById("templates_expected_revenue").append(result.currency + result.expected_revenue);
@@ -24,15 +24,30 @@ class CrmDashboard extends Component {
         document.getElementById("templates_win_ratio").append(result.win_ratio);
         this.props.user_id = result.user_id
         this.props.company_id = result.company_id
-        this.load_doughnut_charts()
-        this.load_pie_charts()
-        this.load_doughnut_charts_campaign()
+        this.load_doughnut_charts(selected_period)
+        this.load_pie_charts(selected_period)
+        this.load_doughnut_charts_campaign(selected_period)
         this.load_bar_chart()
+        this.load_table_values()
    }
 
-   async load_doughnut_charts(){
-   const result = await this.orm.call('crm.lead','doughnut_chart_values',[],{})
+   selected_period(){
+        var ctx = document.getElementById("selected_period")
+        document.getElementById("my_lead").innerHTML = '';
+        document.getElementById("my_opportunity").innerHTML = '';
+        document.getElementById("templates_expected_revenue").innerHTML = '';
+        document.getElementById("templates_revenue").innerHTML = '';
+        document.getElementById("templates_win_ratio").innerHTML = '';
+        document.getElementById('table_body').innerHTML = '';
+        this._fetch_data(ctx.value)
+       }
+
+   async load_doughnut_charts(selected_period){
+   const result = await this.orm.call('crm.lead','doughnut_chart_values',[selected_period],{})
    var ctx = document.getElementById('template_doughnut')
+   ctx.remove()
+   document.getElementById('doughnut_chart').innerHTML = '<canvas id="template_doughnut"/>'
+   ctx = document.getElementById('template_doughnut')
         var chart = new Chart(ctx, {
         type: "doughnut",
         data: {
@@ -56,9 +71,12 @@ class CrmDashboard extends Component {
     });
    }
 
-   async load_pie_charts(){
-   const result = await this.orm.call('crm.lead','pie_chart_values',[],{})
+   async load_pie_charts(selected_period){
+   const result = await this.orm.call('crm.lead','pie_chart_values',[selected_period],{})
    var ctx = document.getElementById('template_pie_chart')
+   ctx.remove()
+   document.getElementById('pie_chart').innerHTML = '<canvas id="template_pie_chart"/>'
+   ctx = document.getElementById('template_pie_chart')
         var chart = new Chart(ctx, {
         type: "pie",
         data: {
@@ -82,9 +100,12 @@ class CrmDashboard extends Component {
     });
    }
 
-   async load_doughnut_charts_campaign(){
-   const result = await this.orm.call('crm.lead','doughnut_chart_values_campaign',[],{})
+   async load_doughnut_charts_campaign(selected_period){
+   const result = await this.orm.call('crm.lead','doughnut_chart_values_campaign',[selected_period],{})
    var ctx = document.getElementById('template_doughnut_campaign')
+   ctx.remove()
+   document.getElementById('doughnut_chart_campaign').innerHTML = '<canvas id="template_doughnut_campaign"/>'
+   ctx = document.getElementById('template_doughnut_campaign')
         var chart = new Chart(ctx, {
         type: "doughnut",
         data: {
@@ -122,6 +143,14 @@ class CrmDashboard extends Component {
             }]
         },
     });
+   }
+
+   async load_table_values(){
+        const result = await this.orm.call('crm.lead','table_values',[],{})
+        var ctx = document.getElementById('table_body')
+        for (let key in result.value_dict) {
+                ctx.innerHTML += '<td>'+key+'</td><td>'+result.value_dict[key]+'</td>'
+        }
    }
    open_myLeads(){
         var company_id = this.props.company_id
