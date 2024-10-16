@@ -230,11 +230,37 @@ class CrmLead(models.Model):
         }
 
     @api.model
-    def bar_chart_values(self):
-        lost = self.search([('company_id', '=', self.env.company.id),
+    def bar_chart_values(self, selected_period='all'):
+        today_date = fields.Date.today()
+        company_id = self.env.company
+        leads = self.search([('company_id', '=', self.env.company.id),
                             ('user_id', '=', self.env.user.id), ('active', '=', False)])
-        lost_leads = lost.filtered(lambda r: r.type == 'lead')
-        lost_oppertunity = lost.filtered(lambda r: r.type == 'opportunity')
+        if selected_period == 'this_year':
+            from_date = date_utils.start_of(today_date, "year")
+            to_date = date_utils.end_of(today_date, "year")
+            leads = self.search([('company_id', '=', company_id.id),
+                                 ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
+                                 ('create_date', '<=', to_date), ('active', '=', False)])
+        elif selected_period == 'this_quater':
+            this_quater_start = self.calculate_quater()
+            this_quater_end = this_quater_start + relativedelta(months=+ 3)
+            leads = self.search([('company_id', '=', company_id.id),
+                                 ('user_id', '=', self.env.user.id), ('create_date', '>=', this_quater_start),
+                                 ('create_date', '<', this_quater_end), ('active', '=', False)])
+        elif selected_period == 'this_month':
+            from_date = date_utils.start_of(today_date, "month")
+            to_date = date_utils.end_of(today_date, "month")
+            leads = self.search([('company_id', '=', company_id.id),
+                                 ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
+                                 ('create_date', '<=', to_date), ('active', '=', False)])
+        elif selected_period == 'this_week':
+            from_date = date_utils.start_of(today_date, "week")
+            to_date = date_utils.end_of(today_date, "week")
+            leads = self.search([('company_id', '=', company_id.id),
+                                 ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
+                                 ('create_date', '<=', to_date), ('active', '=', False)])
+        lost_leads = leads.filtered(lambda r: r.type == 'lead')
+        lost_oppertunity = leads.filtered(lambda r: r.type == 'opportunity')
         lost_count = []
         lost_count.append(len(lost_leads))
         lost_count.append(len(lost_oppertunity))
