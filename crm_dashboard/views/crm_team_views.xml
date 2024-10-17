@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="crm_team_views_form" model="ir.ui.view">
+        <field name="name">crm.team.views.form</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <field name="alias_contact" position="after">
+                <field name="lead_stage" string="Lead Stage" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -2,21 +2,23 @@
 import { registry } from "@web/core/registry";
 import { Component } from  "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
-//import { onWillStart, useRef, onMounted } from "@odoo/owl";
-
-
+import { user } from "@web/core/user";
+import { useState } from "@odoo/owl";
 
 
 
 const actionRegistry = registry.category("actions");
 class CrmDashboard extends Component {
-    setup() {
+    async setup() {
          this.orm = useService('orm')
          this.action = useService("action")
+         this.isManager = await user.hasGroup("sales_team.group_sale_manager");
          this._fetch_data()
+         this.load_table_values()
    }
    async _fetch_data(selected_period='all'){
-        const result =await this.orm.call('crm.lead','get_tiles_data',[selected_period],{})
+        //to pass data to tiles
+        const result =await this.orm.call('crm.lead','get_tiles_data',[selected_period,this.isManager],{})
         document.getElementById("my_lead").append(result.total_leads);
         document.getElementById("my_opportunity").append(result.total_opportunity);
         document.getElementById("templates_expected_revenue").append(result.currency + result.expected_revenue);
@@ -28,7 +30,6 @@ class CrmDashboard extends Component {
         this.load_pie_charts(selected_period)
         this.load_doughnut_charts_campaign(selected_period)
         this.load_bar_chart(selected_period)
-        this.load_table_values()
    }
 
    selected_period(){
@@ -38,12 +39,12 @@ class CrmDashboard extends Component {
         document.getElementById("templates_expected_revenue").innerHTML = '';
         document.getElementById("templates_revenue").innerHTML = '';
         document.getElementById("templates_win_ratio").innerHTML = '';
-        document.getElementById('table_body').innerHTML = '';
         this._fetch_data(ctx.value)
        }
 
    async load_doughnut_charts(selected_period){
-   const result = await this.orm.call('crm.lead','doughnut_chart_values',[selected_period],{})
+   //to pass doughnet chart leads by medium values
+   const result = await this.orm.call('crm.lead','doughnut_chart_values',[selected_period,this.isManager],{})
    var ctx = document.getElementById('template_doughnut')
    ctx.remove()
    document.getElementById('doughnut_chart').innerHTML = '<canvas id="template_doughnut"/>'
@@ -72,7 +73,8 @@ class CrmDashboard extends Component {
    }
 
    async load_pie_charts(selected_period){
-   const result = await this.orm.call('crm.lead','pie_chart_values',[selected_period],{})
+   //to pass pie chart activities values
+   const result = await this.orm.call('crm.lead','pie_chart_values',[selected_period,this.isManager],{})
    var ctx = document.getElementById('template_pie_chart')
    ctx.remove()
    document.getElementById('pie_chart').innerHTML = '<canvas id="template_pie_chart"/>'
@@ -101,7 +103,8 @@ class CrmDashboard extends Component {
    }
 
    async load_doughnut_charts_campaign(selected_period){
-   const result = await this.orm.call('crm.lead','doughnut_chart_values_campaign',[selected_period],{})
+   //to pass doughnet chart leads by campaign values
+   const result = await this.orm.call('crm.lead','doughnut_chart_values_campaign',[selected_period, this.isManager],{})
    var ctx = document.getElementById('template_doughnut_campaign')
    ctx.remove()
    document.getElementById('doughnut_chart_campaign').innerHTML = '<canvas id="template_doughnut_campaign"/>'
@@ -130,7 +133,8 @@ class CrmDashboard extends Component {
    }
 
    async load_bar_chart(selected_period){
-        const result = await this.orm.call('crm.lead','bar_chart_values',[selected_period],{})
+   //to pass bar chart lost opportunity/lead values
+        const result = await this.orm.call('crm.lead','bar_chart_values',[selected_period, this.isManager],{})
         var ctx = document.getElementById('template_bar_chart')
         ctx.remove()
         document.getElementById('bar_chart').innerHTML = '<canvas id="template_bar_chart" width="65rem" height="27rem" style="display: block; box-sizing: border-box;"/>'
@@ -149,36 +153,98 @@ class CrmDashboard extends Component {
    }
 
    async load_table_values(){
-        const result = await this.orm.call('crm.lead','table_values',[],{})
+        //to pass table leads by month values
+        var selected_option = 'all'
+        const result = await this.orm.call('crm.lead','table_values',[this.isManager,selected_option],{})
         var ctx = document.getElementById('table_body')
+        var i = 0
         for (let key in result.value_dict) {
-                ctx.innerHTML += '<td>'+key+'</td><td>'+result.value_dict[key]+'</td>'
+                ctx.innerHTML += '<tr><td style="display:none;">'+result.date_lst[i]+'</td> <td>'+key+'</td><td>'+result.value_dict[key]+'</td></tr>'
+                i = i+1
         }
    }
-   open_myLeads(){
+
+   async selected_period_lead_month_table(){
+        document.getElementById('table_body').innerHTML = '';
+        var selected_option = document.getElementById('selected_period_lead_month').value
+        const result = await this.orm.call('crm.lead','table_values',[this.isManager,selected_option],{})
+        var ctx = document.getElementById('table_body')
+        var i = 0
+        for (let key in result.value_dict) {
+                ctx.innerHTML += '<tr><td style="display:none;">'+result.date_lst[i]+'</td> <td>'+key+'</td><td>'+result.value_dict[key]+'</td></tr>'
+                i = i+1
+        }
+        console.log(selected_option)
+   }
+
+//   clicked_table_row(e){
+//        console.log(e)
+//   }
+
+   async open_myLeads(){
+        //to open leads tile
+        var ctx = document.getElementById("selected_period").value
         var company_id = this.props.company_id
         var user_id = this.props.user_id
+        var created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead')]"
+        const result = await this.orm.call('crm.lead','calculate_start_and_end_dates',[ctx],{})
+        if (this.isManager){
+            if (ctx == 'all'){
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead')]"
+                }
+            else{
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"')]"
+            }
+        }
+        else{
+            if (ctx == 'all'){
+                created_domain = "[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'lead')]"
+            }
+            else{
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"'),('user_id', '=', "+user_id+")]"
+            }
+        }
         this.action.doAction({
-                name:'My Leads',
+                name:'Leads',
                 type: 'ir.actions.act_window',
                 res_model: 'crm.lead',
                 views: [[false, "list"]],
                 view_mode: "list",
-                domain:"[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'lead')]",
+                domain: created_domain,
                 target: "main",
             });
    }
 
-   open_myOpportunity(){
+   async open_myOpportunity(){
+        //to open opportunity tile
+        var ctx = document.getElementById("selected_period").value
         var company_id = this.props.company_id
         var user_id = this.props.user_id
+        var created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'opportunity')]"
+        const result = await this.orm.call('crm.lead','calculate_start_and_end_dates',[ctx],{})
+        if (this.isManager){
+            if (ctx == 'all'){
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'opportunity')]"
+                }
+            else{
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'opportunity'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"')]"
+            }
+        }
+        else{
+            if (ctx == 'all'){
+                created_domain = "[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'opportunity')]"
+            }
+            else{
+                created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'opportunity'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"'),('user_id', '=', "+user_id+")]"
+            }
+        }
         this.action.doAction({
-                name:'My Opportunity',
+                name:'Opportunity',
                 type: 'ir.actions.act_window',
                 res_model: 'crm.lead',
                 views: [[false, "list"]],
                 view_mode: "list",
-                domain:"[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'opportunity')]",
+                domain: created_domain,
                 target: "main",
             });
    }

@@ -2,10 +2,13 @@
 
 {
     'name': 'CRM Dashboard',
-    'depends': ['base', 'crm', 'web', 'utm'],
+    'version': '18.0.1.0.0',
+    'summary': 'To create CRM Dashboard',
+    'description': 'To create crm darboard containing 5 charts',
+    'depends': ['base', 'crm', 'web', 'sale'],
     'data': [
         'data/client_action.xml',
-        'views/utm_medium_views.xml',
+        'views/crm_team_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
@@ -14,5 +17,5 @@
             'https://cdn.jsdelivr.net/npm/chart.js',
         ],
     },
-
+    'installable': True,
 }

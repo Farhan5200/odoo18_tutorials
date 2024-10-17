@@ -14,7 +14,8 @@
                     <div class="o_control_panel_actions d-empty-none d-flex align-items-center justify-content-start justify-content-lg-around order-2 order-lg-1 w-100 w-lg-auto">
                         <div class="o-filter-value d-flex align-items-start w-100">
                             <div class="w-100">
-                                <select class="date_filter_values o_input me-3" id="selected_period" required="true" t-on-change="selected_period">
+                                <select class="date_filter_values o_input me-3" id="selected_period" required="true"
+                                        t-on-change="selected_period">
                                     <option value="all">Select period...</option>
                                     <option value="this_year">This Year</option>
                                     <option value="this_quater">This Quater</option>
@@ -32,7 +33,7 @@
                     <div class="card card-body"
                          style="background-color:#EEF5FF;margin:20px;padding:15px;width: fit-content;min-width:14rem;height: 8rem;max-width:18rem;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px"
                          t-on-click="open_myLeads">
-                        <h3 class="card-title">My Leads</h3>
+                        <h3 class="card-title">Leads</h3>
                         <center>
                             <p id="my_lead" class="card-text" style="font-size:50px;">
                             </p>
@@ -41,7 +42,7 @@
                     <div class="card card-body"
                          style="background-color:#EEF5FF;margin:20px;padding:15px;width: fit-content;min-width:14rem;height: 8rem;max-width:18rem;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px"
                          t-on-click="open_myOpportunity">
-                        <h3 class="card-title">My Opportunity</h3>
+                        <h3 class="card-title">Opportunity</h3>
                         <center>
                             <p id="my_opportunity" class="card-text" style="font-size:50px;">
                             </p>
@@ -76,43 +77,77 @@
                     <table>
                         <tr>
                             <td>
-                                <div class="card card-body" id="doughnut_chart"
+                                <div class="card card-body"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Leads By Medium</h3>
-                                    <canvas id="template_doughnut"/>
+                                    <div id="doughnut_chart">
+                                        <canvas id="template_doughnut"/>
+                                    </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="card card-body" id="pie_chart"
+                                <div class="card card-body"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Activities</h3>
-                                    <canvas id="template_pie_chart"/>
+                                    <div id="pie_chart">
+                                        <canvas id="template_pie_chart"/>
+                                    </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="card card-body" id="doughnut_chart_campaign"
+                                <div class="card card-body"
                                      style="width: fit-content;min-width:30rem;height:30%;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Leads By Campaign</h3>
-                                    <canvas id="template_doughnut_campaign"/>
+                                    <div id="doughnut_chart_campaign">
+                                        <canvas id="template_doughnut_campaign"/>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <div class="card card-body" id="bar_chart"
+                                <div class="card card-body"
                                      style="width: fit-content;min-width:65rem;height:30rem;margin:30px;padding:15px;border:white;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px">
                                     <h3 class="card-title">Lost Opportunity/Lead</h3>
-                                    <canvas id="template_bar_chart" width="65rem" height="27rem"
-                                            style="display: block; box-sizing: border-box;"/>
+                                    <div id="bar_chart">
+                                        <canvas id="template_bar_chart" width="65rem" height="27rem"
+                                                style="display: block; box-sizing: border-box;"/>
+                                    </div>
                                 </div>
                             </td>
                             <td colspan="1" style="vertical-align: top;">
                                 <div style="height:fit-content;max-height:25rem;margin:30px;vertical-align: top;padding:15px;box-shadow: 5px 5px 5px 5px #BCBCCB48;border-radius:10px;background-color:white;">
-                                    <h3 class="card-title">Leads by Month</h3>
+                                    <div class="o_control_panel d-flex flex-column gap-3 px-3 pt-2 pb-3">
+                                        <div class="o_control_panel_main d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-lg-start gap-lg-3 flex-grow-1">
+                                            <div class="o_control_panel_breadcrumbs d-flex align-items-center gap-1 order-0 h-lg-100">
+                                                <div class="o_breadcrumb d-flex gap-1 text-truncate">
+                                                    <div class="o_last_breadcrumb_item active d-flex fs-4 min-w-0 align-items-center">
+                                                        <span class="min-w-0 text-truncate">
+                                                            <h3 class="card-title">Leads by Month</h3>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="o_control_panel_actions d-empty-none d-flex align-items-center justify-content-start justify-content-lg-around order-2 order-lg-1 w-100 w-lg-auto">
+                                                <div class="o-filter-value d-flex align-items-start w-100">
+                                                    <div class="w-100">
+                                                        <select class="date_filter_values o_input me-3"
+                                                                id="selected_period_lead_month" required="true"
+                                                                t-on-change="selected_period_lead_month_table">
+                                                            <option value="all">Select period...</option>
+                                                            <option value="this_month">This Month</option>
+                                                            <option value="previous_month">Previous Month</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <br/>
                                     <table class="table" style="height:fit-content;max-height:25rem;">
                                         <thead style="padding:15px;">
                                             <tr>
+                                                <th style="display:none;">Month Date</th>
                                                 <th>Month</th>
                                                 <th>Total Leads</th>
                                             </tr>
