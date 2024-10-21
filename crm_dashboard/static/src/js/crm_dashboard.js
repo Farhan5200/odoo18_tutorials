@@ -175,9 +175,7 @@ class CrmDashboard extends Component {
 
    async clicked_table_row(selected_row_start_date){
    //to open clicked row in table
-        const result = await this.orm.call('crm.lead','calculate_clicked_table_row_domain',[this.isManager,selected_row_start_date],{})
-        console.log(result.from_date)
-        console.log(result.to_date)
+        const result = await this.orm.call('crm.lead','calculate_clicked_table_row_domain',[selected_row_start_date],{})
         var company_id = this.props.company_id
         var user_id = this.props.user_id
         var created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead')]"

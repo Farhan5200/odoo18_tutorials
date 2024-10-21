@@ -29,6 +29,8 @@ class CrmLead(models.Model):
 
     def calculate_from_and_to_date(self, selected_period):
         """to calculate dates"""
+        from_date = False
+        to_date = False
         today_date = fields.Date.today()
         if selected_period == 'this_year':
             from_date = date_utils.start_of(today_date, "year")
@@ -39,8 +41,7 @@ class CrmLead(models.Model):
         elif selected_period == 'this_week':
             from_date = date_utils.start_of(today_date, "week")
             to_date = date_utils.end_of(today_date, "week")
-        return from_date,to_date
-
+        return from_date, to_date
 
     @api.model
     def get_tiles_data(self, selected_period, isManager):
@@ -51,16 +52,9 @@ class CrmLead(models.Model):
         revenue = 0
         leads = self.search([('company_id', '=', company_id.id)])
         my_lost = self.search([('company_id', '=', company_id.id), ('active', '=', False)])
+        from_date, to_date = self.calculate_from_and_to_date(selected_period)
         if isManager:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-                my_lost = self.search([('company_id', '=', company_id.id),
-                                       ('active', '=', False), ('create_date', '>=', from_date),
-                                       ('create_date', '<=', to_date)])
-            elif selected_period == 'this_quater':
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
@@ -69,18 +63,7 @@ class CrmLead(models.Model):
                 my_lost = self.search([('company_id', '=', company_id.id),
                                        ('active', '=', False), ('create_date', '>=', this_quater_start),
                                        ('create_date', '<', this_quater_end)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-                my_lost = self.search([('company_id', '=', company_id.id),
-                                       ('active', '=', False), ('create_date', '>=', from_date),
-                                       ('create_date', '<=', to_date)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date)])
@@ -88,18 +71,10 @@ class CrmLead(models.Model):
                                        ('active', '=', False), ('create_date', '>=', from_date),
                                        ('create_date', '<=', to_date)])
         else:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('user_id', '=', self.env.user.id),
-                                     ('create_date', '<=', to_date)])
-                my_lost = self.search([('company_id', '=', company_id.id),
-                                       ('user_id', '=', self.env.user.id), ('active', '=', False),
-                                       ('create_date', '>=', from_date),
-                                       ('create_date', '<=', to_date)])
-            elif selected_period == 'this_quater':
+            leads = self.search([('company_id', '=', company_id.id), ('user_id', '=', self.env.user.id)])
+            my_lost = self.search(
+                [('company_id', '=', company_id.id), ('active', '=', False), ('user_id', '=', self.env.user.id)])
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
@@ -109,9 +84,7 @@ class CrmLead(models.Model):
                                        ('user_id', '=', self.env.user.id), ('active', '=', False),
                                        ('create_date', '>=', this_quater_start),
                                        ('create_date', '<', this_quater_end)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date)])
@@ -119,16 +92,7 @@ class CrmLead(models.Model):
                                        ('user_id', '=', self.env.user.id), ('active', '=', False),
                                        ('create_date', '>=', from_date),
                                        ('create_date', '<=', to_date)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-                my_lost = self.search([('company_id', '=', company_id.id),
-                                       ('user_id', '=', self.env.user.id), ('active', '=', False),
-                                       ('create_date', '>=', from_date),
-                                       ('create_date', '<=', to_date)])
+
         my_leads = leads.filtered(lambda r: r.type == 'lead')
         my_opportunity = leads.filtered(lambda r: r.type == 'opportunity')
         won = 0
@@ -159,53 +123,28 @@ class CrmLead(models.Model):
         today_date = fields.Date.today()
         company_id = self.env.company
         leads = self.search([('company_id', '=', self.env.company.id), ('type', '=', 'lead')])
+        from_date, to_date = self.calculate_from_and_to_date(selected_period)
         if isManager:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_quater':
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('type', '=', 'lead')])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('type', '=', 'lead')])
         else:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_quater':
+            leads = self.search(
+                [('company_id', '=', self.env.company.id), ('type', '=', 'lead'), ('user_id', '=', self.env.user.id)])
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('type', '=', 'lead')])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('type', '=', 'lead')])
@@ -233,53 +172,27 @@ class CrmLead(models.Model):
         today_date = fields.Date.today()
         company_id = self.env.company
         leads = self.search([('company_id', '=', self.env.company.id)])
+        from_date, to_date = self.calculate_from_and_to_date(selected_period)
         if isManager:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-            elif selected_period == 'this_quater':
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date)])
         else:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-            elif selected_period == 'this_quater':
+            leads = self.search([('company_id', '=', self.env.company.id), ('user_id', '=', self.env.user.id)])
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date)])
@@ -310,57 +223,31 @@ class CrmLead(models.Model):
         company_id = self.env.company
         leads = self.search([('company_id', '=', self.env.company.id),
                              ('type', '=', 'lead')])
+        from_date, to_date = self.calculate_from_and_to_date(selected_period)
         if isManager:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_quater':
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('type', '=', 'lead')])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('type', '=', 'lead')])
         else:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_quater':
+            leads = self.search([('company_id', '=', self.env.company.id),
+                                 ('type', '=', 'lead'), ('user_id', '=', self.env.user.id)])
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('type', '=', 'lead')])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('type', '=', 'lead')])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('type', '=', 'lead')])
-
         campaign_labels = []
         for rec in leads:
             if rec.campaign_id.name not in campaign_labels:
@@ -385,53 +272,28 @@ class CrmLead(models.Model):
         company_id = self.env.company
         leads = self.search([('company_id', '=', self.env.company.id),
                              ('active', '=', False)])
+        from_date, to_date = self.calculate_from_and_to_date(selected_period)
         if isManager:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('active', '=', False)])
-            elif selected_period == 'this_quater':
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('active', '=', False)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('active', '=', False)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('active', '=', False)])
         else:
-            if selected_period == 'this_year':
-                from_date = date_utils.start_of(today_date, "year")
-                to_date = date_utils.end_of(today_date, "year")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('active', '=', False)])
-            elif selected_period == 'this_quater':
+            leads = self.search([('company_id', '=', self.env.company.id),
+                                 ('active', '=', False), ('user_id', '=', self.env.user.id)])
+            if selected_period == 'this_quater':
                 this_quater_start = self.calculate_quater()
                 this_quater_end = this_quater_start + relativedelta(months=+ 3)
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', this_quater_start),
                                      ('create_date', '<', this_quater_end), ('active', '=', False)])
-            elif selected_period == 'this_month':
-                from_date = date_utils.start_of(today_date, "month")
-                to_date = date_utils.end_of(today_date, "month")
-                leads = self.search([('company_id', '=', company_id.id),
-                                     ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
-                                     ('create_date', '<=', to_date), ('active', '=', False)])
-            elif selected_period == 'this_week':
-                from_date = date_utils.start_of(today_date, "week")
-                to_date = date_utils.end_of(today_date, "week")
+            elif not selected_period == 'all':
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('user_id', '=', self.env.user.id), ('create_date', '>=', from_date),
                                      ('create_date', '<=', to_date), ('active', '=', False)])
@@ -447,7 +309,6 @@ class CrmLead(models.Model):
     @api.model
     def table_values(self, isManager, selected_option):
         """to pass table leads by month values"""
-        print(isManager,'kkll')
         today_date = fields.Date.today()
         if isManager:
             if selected_option == 'all':
@@ -497,7 +358,7 @@ class CrmLead(models.Model):
 
         for i in range(0, len(month_lst)):
             table_value.append({
-                'month_start' : month_start_lst[i],
+                'month_start': month_start_lst[i],
                 'month': month_lst[i],
                 'count': count_lst[i]
             })
@@ -529,15 +390,12 @@ class CrmLead(models.Model):
             'to_date': to_date,
         }
 
-    def demo(self):
-        return 'hi','bye'
-
     @api.model
-    def calculate_clicked_table_row_domain(self, isManager, selected_row_start_date):
+    def calculate_clicked_table_row_domain(self, selected_row_start_date):
         from_date = datetime.datetime.strptime(selected_row_start_date, '%Y-%m-%d').date()
         to_date = date_utils.end_of(from_date, "month")
 
-        return{
-            'from_date':from_date,
-            'to_date':to_date
+        return {
+            'from_date': from_date,
+            'to_date': to_date
         }
