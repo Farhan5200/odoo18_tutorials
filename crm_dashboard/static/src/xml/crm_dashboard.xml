@@ -152,8 +152,12 @@
                                                 <th>Total Leads</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="table_body" style="padding:15px;">
-
+                                        <tbody id="table_body" style="padding:15px;" t-foreach="this.state.table_values" t-as="prod" t-key="prod.month">
+                                            <tr t-on-click="() => this.clicked_table_row(prod.month_start)">
+                                                <td style="display:none;"><t t-esc="prod.month_start"/></td>
+                                                <td><t t-esc="prod.month"/></td>
+                                                <td><t t-esc="prod.count"/></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

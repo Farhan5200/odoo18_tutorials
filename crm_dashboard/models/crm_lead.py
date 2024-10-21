@@ -4,6 +4,7 @@ from odoo import api, fields, models
 from odoo.tools import date_utils
 from dateutil.relativedelta import relativedelta
 import calendar
+import datetime
 
 
 class CrmLead(models.Model):
@@ -25,6 +26,21 @@ class CrmLead(models.Model):
             return third_quater_from
         elif today_date >= forth_quater_from and today_date <= forth_quater_end:
             return forth_quater_from
+
+    def calculate_from_and_to_date(self, selected_period):
+        """to calculate dates"""
+        today_date = fields.Date.today()
+        if selected_period == 'this_year':
+            from_date = date_utils.start_of(today_date, "year")
+            to_date = date_utils.end_of(today_date, "year")
+        elif selected_period == 'this_month':
+            from_date = date_utils.start_of(today_date, "month")
+            to_date = date_utils.end_of(today_date, "month")
+        elif selected_period == 'this_week':
+            from_date = date_utils.start_of(today_date, "week")
+            to_date = date_utils.end_of(today_date, "week")
+        return from_date,to_date
+
 
     @api.model
     def get_tiles_data(self, selected_period, isManager):
@@ -77,6 +93,7 @@ class CrmLead(models.Model):
                 to_date = date_utils.end_of(today_date, "year")
                 leads = self.search([('company_id', '=', company_id.id),
                                      ('create_date', '>=', from_date),
+                                     ('user_id', '=', self.env.user.id),
                                      ('create_date', '<=', to_date)])
                 my_lost = self.search([('company_id', '=', company_id.id),
                                        ('user_id', '=', self.env.user.id), ('active', '=', False),
@@ -430,7 +447,7 @@ class CrmLead(models.Model):
     @api.model
     def table_values(self, isManager, selected_option):
         """to pass table leads by month values"""
-        print(isManager, selected_option)
+        print(isManager,'kkll')
         today_date = fields.Date.today()
         if isManager:
             if selected_option == 'all':
@@ -467,7 +484,7 @@ class CrmLead(models.Model):
         month_start_lst = []
         month_lst = []
         count_lst = []
-        value_dict = {}
+        table_value = []
         for rec in leads:
             if calendar.month_name[rec.create_date.month] not in month_lst:
                 month_lst.append(calendar.month_name[rec.create_date.month])
@@ -479,10 +496,14 @@ class CrmLead(models.Model):
                     count_lst[i] += 1
 
         for i in range(0, len(month_lst)):
-            value_dict[str(month_lst[i])] = count_lst[i]
+            table_value.append({
+                'month_start' : month_start_lst[i],
+                'month': month_lst[i],
+                'count': count_lst[i]
+            })
+
         return {
-            'value_dict': value_dict,
-            'date_lst': month_start_lst,
+            'table_value': table_value
         }
 
     @api.model
@@ -506,4 +527,17 @@ class CrmLead(models.Model):
         return {
             'from_date': from_date,
             'to_date': to_date,
+        }
+
+    def demo(self):
+        return 'hi','bye'
+
+    @api.model
+    def calculate_clicked_table_row_domain(self, isManager, selected_row_start_date):
+        from_date = datetime.datetime.strptime(selected_row_start_date, '%Y-%m-%d').date()
+        to_date = date_utils.end_of(from_date, "month")
+
+        return{
+            'from_date':from_date,
+            'to_date':to_date
         }

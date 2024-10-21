@@ -9,15 +9,18 @@ import { useState } from "@odoo/owl";
 
 const actionRegistry = registry.category("actions");
 class CrmDashboard extends Component {
-    async setup() {
+    setup() {
          this.orm = useService('orm')
          this.action = useService("action")
-         this.isManager = await user.hasGroup("sales_team.group_sale_manager");
          this._fetch_data()
          this.load_table_values()
+         this.state = useState({
+            table_values : [],
+         });
    }
    async _fetch_data(selected_period='all'){
         //to pass data to tiles
+        this.isManager = await user.hasGroup("sales_team.group_sale_manager");
         const result =await this.orm.call('crm.lead','get_tiles_data',[selected_period,this.isManager],{})
         document.getElementById("my_lead").append(result.total_leads);
         document.getElementById("my_opportunity").append(result.total_opportunity);
@@ -154,32 +157,46 @@ class CrmDashboard extends Component {
 
    async load_table_values(){
         //to pass table leads by month values
+        this.isManager = await user.hasGroup("sales_team.group_sale_manager");
         var selected_option = 'all'
-        const result = await this.orm.call('crm.lead','table_values',[this.isManager,selected_option],{})
+            const result = await this.orm.call('crm.lead','table_values',[this.isManager,selected_option],{})
         var ctx = document.getElementById('table_body')
         var i = 0
-        for (let key in result.value_dict) {
-                ctx.innerHTML += '<tr><td style="display:none;">'+result.date_lst[i]+'</td> <td>'+key+'</td><td>'+result.value_dict[key]+'</td></tr>'
-                i = i+1
-        }
+        this.state.table_values = result.table_value
    }
 
    async selected_period_lead_month_table(){
-        document.getElementById('table_body').innerHTML = '';
         var selected_option = document.getElementById('selected_period_lead_month').value
         const result = await this.orm.call('crm.lead','table_values',[this.isManager,selected_option],{})
         var ctx = document.getElementById('table_body')
         var i = 0
-        for (let key in result.value_dict) {
-                ctx.innerHTML += '<tr><td style="display:none;">'+result.date_lst[i]+'</td> <td>'+key+'</td><td>'+result.value_dict[key]+'</td></tr>'
-                i = i+1
-        }
-        console.log(selected_option)
+        this.state.table_values = result.table_value
    }
 
-//   clicked_table_row(e){
-//        console.log(e)
-//   }
+   async clicked_table_row(selected_row_start_date){
+   //to open clicked row in table
+        const result = await this.orm.call('crm.lead','calculate_clicked_table_row_domain',[this.isManager,selected_row_start_date],{})
+        console.log(result.from_date)
+        console.log(result.to_date)
+        var company_id = this.props.company_id
+        var user_id = this.props.user_id
+        var created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead')]"
+        if (this.isManager){
+            created_domain = "[('company_id', '=', "+company_id+"),('type', '=', 'lead'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"')]"
+        }
+        else{
+            created_domain = "[('company_id', '=', "+company_id+"),('user_id', '=', "+user_id+"),('type', '=', 'lead'),('create_date', '>=', '"+result.from_date+"'),('create_date', '<=', '"+result.to_date+"')]"
+        }
+        this.action.doAction({
+                name:'Leads',
+                type: 'ir.actions.act_window',
+                res_model: 'crm.lead',
+                views: [[false, "list"]],
+                view_mode: "list",
+                domain: created_domain,
+                target: "main",
+            });
+   }
 
    async open_myLeads(){
         //to open leads tile
