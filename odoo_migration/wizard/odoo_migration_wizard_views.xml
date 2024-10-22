@@ -5,9 +5,24 @@
         <field name="model">odoo.migration.wizard</field>
         <field name="arch" type="xml">
             <form>
+                <group>
+                    <group string="From">
+                        <field name="url_db1"/>
+                        <field name="db_1"/>
+                        <field name="username_db_1"/>
+                        <field name="password_db_1" password="True"/>
+                    </group>
+                    <group string="To">
+                        <field name="url_db2"/>
+                        <field name="db_2"/>
+                        <field name="username_db_2"/>
+                        <field name="password_db_2" password="True"/>
+                    </group>
+                </group>
                 <footer>
                     <button name="migrate_odoo" string="Migrate" type="object"
                             class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
