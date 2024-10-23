@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="client_odoo_migration_modal" model="ir.actions.client">
+        <field name="name">Migration</field>
+        <field name="tag">odoo_migration_modal</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'medium', 'footer': false, 'scroll':false}</field>
+    </record>
+
+    <menuitem id="odoo_migration_wizard_menu" action="client_odoo_migration_modal" name="Migration"
+              parent="purchase.menu_purchase_root" sequence="100"/>
+</odoo>

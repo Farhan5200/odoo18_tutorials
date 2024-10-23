@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<t t-name="odoo_migration.odoo_migration_modal">
+    <div class="row" style="padding-right:50px;padding-left:50px;">
+        <div style="width:50%;padding:10px;">
+            <center>
+                <h3>From</h3>
+            </center>
+            <input type="text" id="url_db1" class="form-control" placeholder="Database URL"/><br/>
+            <input type="text" id="db_1" class="form-control" placeholder="Database Name"/><br/>
+            <input type="text" id="username_db_1" class="form-control" placeholder="User Name"/><br/>
+            <input type="password" id="password_db_1" class="form-control" placeholder="Password"/>
+        </div>
+        <div style="width:50%;padding:10px;">
+            <center>
+                <h3>To</h3>
+            </center>
+            <input type="text" id="url_db2" class="form-control" placeholder="Database URL"/><br/>
+            <input type="text" id="db_2" class="form-control" placeholder="Database Name"/><br/>
+            <input type="text" id="username_db_2" class="form-control" placeholder="User Name"/><br/>
+            <input type="password" id="password_db_2" class="form-control" placeholder="Password"/>
+        </div>
+    </div>
+    <footer>
+    <center>
+        <div style="padding:10px;">
+            <button t-on-click="odoo_migrate" class="btn btn-primary">Migrate</button>
+        </div>
+    </center>
+    </footer>
+</t>

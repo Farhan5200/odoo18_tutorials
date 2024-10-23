@@ -1,45 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import api, models
 import xmlrpc.client
-
-from odoo.exceptions import UserError
 
 
 class OdooMigrationWizard(models.TransientModel):
-    _name = 'odoo.migration.wizard'
-    _description = 'Odoo Migration Wizard'
+    """to migrate purchase orders"""
+    _name = 'odoo.migration'
+    _description = 'Odoo Migration'
 
-    url_db1 = fields.Char(string="Database URL", required=True)
-    db_1 = fields.Char(string="Database Name", required=True)
-    username_db_1 = fields.Char(string="User Name", required=True)
-    password_db_1 = fields.Char(string="Password", required=True)
-
-    url_db2 = fields.Char(string="Database URL", required=True)
-    db_2 = fields.Char(string="Database Name", required=True)
-    username_db_2 = fields.Char(string="User Name", required=True)
-    password_db_2 = fields.Char(string="Password", required=True)
-
-    def migrate_odoo(self):
+    @api.model
+    def migrate_odoo(self,url_db1,db_1,username_db_1,password_db_1,url_db2,db_2,username_db_2,password_db_2):
+        """to migrate purchase orders"""
         # url_db1 = "http://localhost:8016/"
         # db_1 = 'test_migrate_17'
         # username_db_1 = 'admin'
         # password_db_1 = 'admin'
-        #
+
         # url_db2 = "http://cybrosys:8017/"
         # db_2 = 'odoo17-18_migration'
         # username_db_2 = 'admin'
         # password_db_2 = 'admin'
 
-        url_db1 = self.url_db1
-        db_1 = self.db_1
-        username_db_1 = self.username_db_1
-        password_db_1 = self.password_db_1
-
-        url_db2 = self.url_db2
-        db_2 = self.db_2
-        username_db_2 = self.username_db_2
-        password_db_2 = self.password_db_2
         try:
             common_1 = xmlrpc.client.ServerProxy('{}/xmlrpc/2/common'.format(url_db1))
             models_1 = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url_db1))
@@ -51,8 +33,11 @@ class OdooMigrationWizard(models.TransientModel):
 
             db_1_contacts = models_1.execute_kw(db_1, uid_db1, password_db_1, 'res.partner', 'search_read', [],
                                                 {'fields': ['name', 'email', 'id', 'customer_rank', 'supplier_rank']})
+            testing_con = models_2.execute_kw(db_2, uid_db2, password_db_2, 'res.partner', 'search_read', [],
+                                   {'fields': ['name']})
         except:
-            raise UserError('Entered credentials are not valid....!')
+
+            return False
 
         """to create contacts"""
         for partner in db_1_contacts:
@@ -126,8 +111,4 @@ class OdooMigrationWizard(models.TransientModel):
                         'product_uom': j['product_uom'][0],
                         'display_type': j['display_type']
                     }])
-
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'reload',
-        }
+        return True
