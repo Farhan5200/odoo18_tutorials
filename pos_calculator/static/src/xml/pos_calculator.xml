@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <t t-name="pos_calculator.pos_calculator_modal">
+    <Dialog>
     <center>
     <div style="width:50%;height:50%;padding:10px;">
         <input type="text" id="input_box" class="form-control"  placeholder="Give some input...."/>
     </div>
     </center>
+    </Dialog>
 </t>

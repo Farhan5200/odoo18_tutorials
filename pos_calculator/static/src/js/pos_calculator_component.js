@@ -16,6 +16,9 @@ export class PosCalculator extends Component {
         getPayload: Function,
 
     };
+    setup(){
+    console.log('farhan')
+    };
     static defaultProps = {
        title: "Customer Details",
     };

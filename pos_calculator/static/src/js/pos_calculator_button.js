@@ -10,7 +10,7 @@ import { makeAwaitable } from "@point_of_sale/app/store/make_awaitable_dialog";
 patch(ControlButtons.prototype, {
     async openCalculator() {
          console.log(this)
-         const selectedProduct = await makeAwaitable(this.env.services.dialog, PosCalculator, {
+         await makeAwaitable(this.dialog, PosCalculator, {
 //         this.env.services.dialog.add(PosCalculator,{
                 title:'New',
             });
