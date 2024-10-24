@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="client_pos_calculator_modal" model="ir.actions.client">
+        <field name="name">Calculator</field>
+        <field name="tag">pos_calculator_modal</field>
+        <field name="target">new</field>
+<!--        <field name="context">{'dialog_size': 'medium', 'footer': false}</field>-->
+    </record>
+</odoo>

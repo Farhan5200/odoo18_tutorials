@@ -9,4 +9,4 @@ class SurveyContact(models.Model):
 
     survey_id = fields.Many2one('survey.survey')
     question_id = fields.Many2one('survey.question', domain="[('survey_id', '=', survey_id)]", required=True)
-    partner_field_select = fields.Many2one('ir.model.fields', domain="[('model_id.model', '=', 'res.partner')]")
+    partner_field_select_id = fields.Many2one('ir.model.fields', domain="[('model_id.model', '=', 'res.partner')]")

@@ -10,7 +10,7 @@
                     <field name="survey_contact_ids">
                         <list editable="bottom">
                             <field name="question_id" options="{'no_create': True}"/>
-                            <field name="partner_field_select" options="{'no_create': True}"/>
+                            <field name="partner_field_select_id" options="{'no_create': True}"/>
                         </list>
                     </field>
                 </page>
