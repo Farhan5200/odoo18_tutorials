@@ -3,12 +3,7 @@
 from odoo import fields,models
 
 class SurveySurvey(models.Model):
+    """to add new one2many field for contact creation"""
     _inherit = 'survey.survey'
 
     survey_contact_ids = fields.One2many('survey.contact', 'survey_id')
-
-    def demo(self):
-        print('hi')
-        print(self.env['res.partner'].fields_get())
-        for i,j in self.env['res.partner'].fields_get().items():
-            print(j['string'])

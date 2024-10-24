@@ -5,15 +5,12 @@
         <field name="model">survey.survey</field>
         <field name="inherit_id" ref="survey.survey_survey_view_form"/>
         <field name="arch" type="xml">
-            <button name="action_send_survey" position="after">
-                <button type="object" name="demo"/>
-            </button>
             <page name="description_done" position="after">
                 <page string="Contact Creation">
                     <field name="survey_contact_ids">
                         <list editable="bottom">
                             <field name="question_id" options="{'no_create': True}"/>
-                            <field name="partner_field_select"/>
+                            <field name="partner_field_select" options="{'no_create': True}"/>
                         </list>
                     </field>
                 </page>
