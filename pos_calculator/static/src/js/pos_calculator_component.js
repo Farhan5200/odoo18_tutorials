@@ -1,10 +1,6 @@
 /** @odoo-module */
-//import { registry } from "@web/core/registry";
 import { Component } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
-
-//import { useService } from "@web/core/utils/hooks";
-//import { renderToFragment } from "@web/core/utils/render";
 
 
 export class PosCalculator extends Component {
@@ -17,17 +13,37 @@ export class PosCalculator extends Component {
 
     };
     setup(){
-    console.log('farhan')
+    console.log(this.props)
     };
     static defaultProps = {
-       title: "Customer Details",
+       title: "Calculator",
     };
-    computePayload() {
-        const selected = this.props.list.find((item) => this.state.selectedId === item.id);
-        return selected && selected.item;
-    }
-    confirm() {
-        this.props.getPayload(this.computePayload());
+
+    close() {
         this.props.close();
+    }
+    take_value(e){
+        var ctx = document.getElementById('input_box').value
+        ctx += e
+        document.getElementById('input_box').value = ctx
+    }
+    calculate(){
+        var ctx = document.getElementById('input_box').value
+        try{
+            ctx = eval(ctx)
+        }
+        catch(err){
+            ctx = 'Syntax Error....'
+        }
+        document.getElementById('input_box').value = ctx
+    }
+    clear_all(){
+        document.getElementById('input_box').value = ''
+    }
+    remove_last(){
+        var ctx = document.getElementById('input_box').value
+        ctx = ctx.slice(0, -1)
+        console.log(ctx)
+        document.getElementById('input_box').value = ctx
     }
 }

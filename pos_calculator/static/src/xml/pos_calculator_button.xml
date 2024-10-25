@@ -3,8 +3,10 @@
    t-inherit="point_of_sale.ControlButtons"
    t-inherit-mode="extension">
     <SelectPartnerButton position="after">
-        <button class="btn btn-light btn-lg flex-shrink-0 ms-auto" t-on-click="openCalculator">
-            Calculator
-        </button>
+        <t t-if="this.pos.config.pos_virtual_calculator">
+            <button class="btn btn-light btn-lg flex-shrink-0 ms-auto" t-on-click="openCalculator">
+                Calculator
+            </button>
+        </t>
     </SelectPartnerButton>
 </t>

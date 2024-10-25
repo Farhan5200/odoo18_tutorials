@@ -12,11 +12,7 @@ patch(ControlButtons.prototype, {
          console.log(this)
          await makeAwaitable(this.dialog, PosCalculator, {
 //         this.env.services.dialog.add(PosCalculator,{
-                title:'New',
+                title:'Calculator',
             });
-//            const selectedProduct = await makeAwaitable(this.env.services.dialog, SelectionPopup, {
-//                title: "Please select a product for this reward",
-//                list: [('productsList','fff')],
-//            });
     }
 });
