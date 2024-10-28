@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="work_report_from_views" model="ir.ui.view">
+        <field name="name">work.report.from.views</field>
+        <field name="model">work.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name" style="width:100%;"/>
+                    </h1>
+                    <group>
+                        <field name="employee_id" options="{'no_create' : True}"/>
+                        <field name="create_date"/>
+                    </group>
+                    <notebook>
+                        <page string="Report">
+                            <field name="report"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="work_report_search_view" model="ir.ui.view">
+        <field name="name">Work Report</field>
+        <field name="model">work.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="group by employee" string="Employee" context="{'group_by':'employee_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="work_report_action" model="ir.actions.act_window">
+        <field name="name">Work Report</field>
+        <field name="res_model">work.report</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <menuitem id="work_report_menu" name="Work Report" parent="hr.menu_hr_employee_payroll" action="work_report_action" sequence="10"/>
+</odoo>

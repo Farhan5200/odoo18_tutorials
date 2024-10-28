@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_work_report_pdf" model="ir.actions.report">
+        <field name="name">PDF Work Report</field>
+        <field name="model">work.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">work_report_tracker.pdf_work_report_templates</field>
+        <field name="report_file">work_report_tracker.pdf_work_report_templates</field>
+        <field name="binding_model_id" ref="work_report_tracker.model_work_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

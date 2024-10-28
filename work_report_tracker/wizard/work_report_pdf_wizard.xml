@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="work_report_wizard_from_views" model="ir.ui.view">
+        <field name="name">work.report.wizard.from.views</field>
+        <field name="model">work.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="employee_ids" options="{'no_create' : True}" widget="many2many_tags"/>
+                        <field name="period"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print_pdf_work_report" string="Print" type="object"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="work_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Work Report Wizard</field>
+        <field name="res_model">work.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="work_report_wizard_menu" name="Work Report" parent="hr.hr_menu_hr_reports" action="work_report_wizard_action" sequence="10"/>
+</odoo>

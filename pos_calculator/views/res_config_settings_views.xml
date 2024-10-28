@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <setting id="is_order_shared" position="before">
                 <setting string="Virtual Calculator">
-                        <field name="Virtual_calculator"/>
+                    <field name="Virtual_calculator"/>
                 </setting>
             </setting>
         </field>

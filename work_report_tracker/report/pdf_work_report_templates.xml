@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="pdf_work_report_templates">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2>
+                        <center>Sales Report</center>
+                    </h2>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
