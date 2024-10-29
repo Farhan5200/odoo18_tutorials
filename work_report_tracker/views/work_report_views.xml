@@ -28,6 +28,14 @@
         <field name="model">work.report</field>
         <field name="arch" type="xml">
             <search>
+                <filter name="Created This Year"
+                        domain="[('create_date', '&gt;=', (datetime.date.today()).strftime('%%Y-01-01 00:00:00')),('create_date', '&lt;=', (datetime.date.today()).strftime('%%Y-12-31 23:59:59'))]"/>
+                <filter name="Created This Month"
+                        domain="[('create_date', '&gt;=', (datetime.date.today()).strftime('%%Y-%%m-01 00:00:00')),('create_date', '&lt;=', (datetime.date.today()).strftime('%%Y-%%m-31 23:59:59'))]"/>
+                <filter name="Created Yesterday"
+                        domain="[('create_date', '&gt;=', (datetime.date.today()-datetime.timedelta(hours=24)).strftime('%%Y-%%m-%%d 00:00:00')),('create_date', '&lt;=', (datetime.date.today()-datetime.timedelta(hours=24)).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                <filter name="Created Today"
+                        domain="[('create_date', '>=', time.strftime('%%Y-%%m-%%d 00:00:00')),('create_date', '&lt;=', time.strftime('%%Y-%%m-%%d 23:59:59'))]"/>
                 <filter name="group by employee" string="Employee" context="{'group_by':'employee_id'}"/>
             </search>
         </field>
@@ -39,5 +47,6 @@
         <field name="view_mode">list,form,kanban</field>
     </record>
 
-    <menuitem id="work_report_menu" name="Work Report" parent="hr.menu_hr_employee_payroll" action="work_report_action" sequence="10"/>
+    <menuitem id="work_report_menu" name="Work Report" parent="hr.menu_hr_employee_payroll" action="work_report_action"
+              sequence="10"/>
 </odoo>

@@ -16,7 +16,7 @@ class WorkReportWizard(models.TransientModel):
     def action_print_pdf_work_report(self):
         """function to print pdf report"""
         data = {
-
+            'selected_employees' : self.employee_ids.ids,
+            'selected_period': self.period
         }
-
         return self.env.ref('work_report_tracker.action_work_report_pdf').report_action(None, data=data)

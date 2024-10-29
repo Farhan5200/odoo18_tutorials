@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="multiple_reference_product_from_views" model="ir.ui.view">
+        <field name="name">multiple.reference.product.from.views</field>
+        <field name="model">multiple.reference.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="product_id" options="{'no_create' : True}"/>
+                    </group>
+                    <button name="set_default_code" type="object" string="Set Default"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="multiple_reference_product_action" model="ir.actions.act_window">
+        <field name="name">Multiple Reference</field>
+        <field name="res_model">multiple.reference.product</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="multiple_reference_product_menu" name="Multiple Reference" parent="purchase.menu_purchase_config"
+              action="multiple_reference_product_action"
+              sequence="10"/>
+</odoo>

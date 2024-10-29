@@ -12,18 +12,20 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button name="action_print_pdf_work_report" string="Print" type="object"/>
+                    <button name="action_print_pdf_work_report" string="Print" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
     <record id="work_report_wizard_action" model="ir.actions.act_window">
-        <field name="name">Work Report Wizard</field>
+        <field name="name">Work Report</field>
         <field name="res_model">work.report.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
 
-    <menuitem id="work_report_wizard_menu" name="Work Report" parent="hr.hr_menu_hr_reports" action="work_report_wizard_action" sequence="10"/>
+    <menuitem id="work_report_wizard_menu" name="Work Report" parent="hr.hr_menu_hr_reports"
+              action="work_report_wizard_action" sequence="10"/>
 </odoo>

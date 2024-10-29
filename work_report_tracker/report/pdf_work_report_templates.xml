@@ -3,11 +3,64 @@
     <template id="pdf_work_report_templates">
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
-                <div class="page">
-                    <div class="oe_structure"/>
-                    <h2>
-                        <center>Sales Report</center>
-                    </h2>
+                <div>
+                    <div>
+                        <h1>
+                            <center>Work Report</center>
+                        </h1>
+                        <h5>
+                            <center>
+                                <t t-if="period">
+                                    <span>From :
+                                        <t t-esc="from_date"/>
+                                        <![CDATA[&nbsp;]]>------ <![CDATA[&nbsp;]]>
+                                    </span>
+                                    <span>To :
+                                        <t t-esc="to_date"/>
+                                    </span>
+                                </t>
+                            </center>
+                        </h5>
+                        <br/>
+                        <br/>
+                    </div>
+                    <div>
+                        <t t-if="selected_employee">
+                            <t t-foreach="selected_employee" t-as="employee">
+                                <t t-if="employee.id in all_report_emp_id">
+                                    <span>
+                                        <b>Employee Name :
+                                            <t t-esc="employee.name"/>
+                                        </b>
+                                    </span>
+                                </t>
+                                <br/>
+                                <t t-foreach="reports" t-as="repo">
+                                    <t t-if="employee.id == repo.employee_id.id">
+                                        <t t-esc="repo.report"/>
+                                        <br/>
+                                    </t>
+                                </t>
+                                <br/>
+                                <br/>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-foreach="all_work_emp" t-as="emp_id">
+                                <span>
+                                    <b>Employee Name :
+                                        <t t-esc="emp_id.name"/>
+                                    </b>
+                                </span>
+                                <t t-foreach="reports" t-as="repo">
+                                    <t t-if="emp_id.id == repo.employee_id.id">
+                                        <t t-esc="repo.report"/>
+                                        <br/>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                    </div>
                 </div>
             </t>
         </t>
