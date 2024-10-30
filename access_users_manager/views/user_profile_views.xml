@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="user_profile_views_form" model="ir.ui.view">
+        <field name="name">user.profile.views.form</field>
+        <field name="model">user.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <label for="name" string="Name"/>
+                        <field name="name" required="True" style="width:100%;"/>
+                    </h1>
+                    <group>
+                        <field name="user_ids" options="{'no_create' : True}" string="Users" widget="many2many_avatar_user"/>
+                        <field name="color" widget="color_picker" string="Color"/>
+                    </group>
+                    <notebook>
+                        <page string="Groups">
+                            <field name="group_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="user_profile_action" model="ir.actions.act_window">
+        <field name="name">User Profile</field>
+        <field name="res_model">user.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="user_access_manager_root_menu" name="User Access Manager"/>
+    <menuitem id="user_access_manager_first_level_menu" name="Profile Manager" parent="user_access_manager_root_menu"/>
+    <menuitem id="user_profile_menu" action="user_profile_action" name="User Profile"
+              parent="user_access_manager_first_level_menu" sequence="1"/>
+</odoo>

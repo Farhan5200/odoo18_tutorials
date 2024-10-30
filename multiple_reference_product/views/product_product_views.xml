@@ -5,11 +5,10 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
-            <field name="barcode" position="before">
-                <field name="multiple_reference_ids" string="Multiple References"/>
-            </field>
-            <field name="default_code" position="attributes">
-                <attribute name="invisible" >True</attribute>
+            <field name="default_code" position="after">
+                <div style="position:relative;left:83%;bottom:150%;">
+                <button type="object" name="action_show_more" string="Show More" class="oe_highlight"/>
+                </div>
             </field>
         </field>
     </record>

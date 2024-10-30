@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="access_manager_views_form" model="ir.ui.view">
+        <field name="name">access.manager.views.form</field>
+        <field name="model">access.manager</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="action_apply_changes" string="Apply"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" required="True" style="width:100%;"/>
+                    </h1>
+                    <group>
+                        <field name="company_ids" options="{'no_create' : True}" string="Companies" widget="many2many_tags"/>
+                        <field name="user_profile_ids" widget="many2many_tags" string="Profiles" options="{'no_create' : True, 'color_field' : 'color'}"/>
+                    </group>
+                    <notebook>
+                        <page string="Hide Any Menus">
+                            <field name="menu_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="access_manager_action" model="ir.actions.act_window">
+        <field name="name">Access Manager</field>
+        <field name="res_model">access.manager</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="access_manager_menu" action="access_manager_action" name="Access Manager"
+              parent="user_access_manager_first_level_menu" sequence="2"/>
+</odoo>

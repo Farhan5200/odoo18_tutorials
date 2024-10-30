@@ -10,7 +10,7 @@
                         <field name="name"/>
                         <field name="product_id" options="{'no_create' : True}"/>
                     </group>
-                    <button name="set_default_code" type="object" string="Set Default"/>
+                    <button name="set_default_code" type="object" string="Set Default" class="oe_highlight"/>
                 </sheet>
             </form>
         </field>

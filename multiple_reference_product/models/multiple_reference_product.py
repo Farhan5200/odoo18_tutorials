@@ -3,6 +3,7 @@
 from odoo import fields,models
 
 class MultipleReferenceProduct(models.Model):
+    """to add multiple references to a product"""
     _name = 'multiple.reference.product'
 
 
@@ -11,5 +12,6 @@ class MultipleReferenceProduct(models.Model):
 
 
     def set_default_code(self):
+        """to set the selected code as default"""
         for rec in self:
             rec.product_id.default_code = rec.name
