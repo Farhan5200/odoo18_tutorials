@@ -20,6 +20,14 @@
                         <page string="Hide Any Menus">
                             <field name="menu_ids"/>
                         </page>
+                        <page string="Hide Any Button or Tab">
+                            <field name="hide_buttons_tab_ids">
+                                <list>
+                                    <field name="m"/>
+                                    <field name="buttons"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>

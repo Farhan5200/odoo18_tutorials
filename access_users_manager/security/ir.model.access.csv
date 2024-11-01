@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_user_profile,access.user.profile,model_user_profile,base.group_user,1,1,1,1
 access_access_manager,access.access.manager,model_access_manager,base.group_user,1,1,1,1
+access_hide_buttons_tab,access.hide.buttons.tab,model_hide_buttons_tab,base.group_user,1,1,1,1
