@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<!-- <record model="res.groups" id="group_access_models">
+			<field name="name">User Access Model [Create/Edit/Delete]</field>
+			<field name="category_id" ref="base.module_category_hidden" />
+		</record> -->
+	</data>
+</odoo>

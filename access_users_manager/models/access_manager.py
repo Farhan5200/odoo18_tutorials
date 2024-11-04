@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api,fields,models
+import xml.etree.ElementTree as ET
+
 from bs4 import BeautifulSoup
 
 
@@ -12,7 +14,6 @@ class AccessManager(models.Model):
     menu_ids = fields.Many2many('ir.ui.menu')
     hide_buttons_tab_ids = fields.One2many('hide.buttons.tab','access_manager_id')
 
-
     def hide_menus(self):
         for rec in self.menu_ids:
             for groups in rec.groups_id:
@@ -23,16 +24,13 @@ class AccessManager(models.Model):
 
 
     def hide_buttons(self):
-        records = self.env['ir.ui.view'].search([('id', '=', 4)])
-        result = BeautifulSoup(records.arch_db)
-        buttons = result.find_all('button')
-        selection_field = []
-        for i in buttons:
-            values = i.attrs
-            selection_value = f"{values['string']} ({values['name']})"
-            selection_key = values['name']
-            selection_field.append((selection_key,selection_value))
-        print(selection_field)
+        root = ET.fromstring(self.hide_buttons_tab_ids.button_id.view_id.arch_db)
+        tree = ET.ElementTree(root).getroot()
+        for i in ET.fromstring(self.hide_buttons_tab_ids.button_id.view_id.arch_db).iter('button'):
+            if i.attrib['name'] == 'action_create_invoice':
+                i.set('invisible','1')
+                modified_xml_string = ET.tostring(i, encoding='UTF-8')
+                print(self.hide_buttons_tab_ids.button_id.view_id.arch_db)
 
     def action_apply_changes(self):
         print('hi')

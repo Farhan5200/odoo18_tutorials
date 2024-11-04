@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button type="object" name="action_apply_changes" string="Apply"/>
+                    <button type="object" name="action_apply_changes" string="Apply" invisible="0"/>
                 </header>
                 <sheet>
                     <h1>
@@ -17,16 +17,19 @@
                         <field name="user_profile_ids" widget="many2many_tags" string="Profiles" options="{'no_create' : True, 'color_field' : 'color'}"/>
                     </group>
                     <notebook>
-                        <page string="Hide Any Menus">
+                        <page string="Hide Any Menus" groups="base.group_system">
                             <field name="menu_ids"/>
                         </page>
                         <page string="Hide Any Button or Tab">
                             <field name="hide_buttons_tab_ids">
-                                <list>
-                                    <field name="m"/>
-                                    <field name="buttons"/>
+                                <list editable="bottom">
+                                    <field name="model_id"/>
+                                    <field name="button_ids" invisible="1" nolabel="1"/>
+                                    <field name="button_id" domain="[('id', 'in', button_ids)]" options="{'no_create' : True}"/>
                                 </list>
                             </field>
+                        </page>
+                        <page string="Edit Field Access">
                         </page>
                     </notebook>
                 </sheet>

@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<odoo>
+    <!--    Sale order report action-->
+    <record id="action_report_sale_order" model="ir.actions.report">
+   <field name="name">Sale Order</field>
+   <field name="model">room.booking</field>
+   <field name="report_type">qweb-pdf</field>
+   <field name="report_name">hotel_management_odoo.report_sale_order</field>
+   <field name="report_file">hotel_management_odoo.report_sale_order</field>
+   <field name="binding_model_id" ref="model_room_booking"/>
+   <field name="binding_type">report</field>
+</record>
+</odoo>

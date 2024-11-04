@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="tree_restrict_button_view" model="ir.ui.view">
+		<field name="name">tree_restrict.button</field>
+		<field name="model">restrict.button</field>
+		<field name="arch" type="xml">
+			<tree string="Button Restrictions">
+				<field name="ir_model_id" />
+				<field name="button_name" />
+				<field name="button_type" />
+				<field name="user_ids" widget="many2many_tags" />
+				<field name="validation_msg" optional="hide" />
+			</tree>
+		</field>
+	</record>
+	<record id="form_restrict_button_view" model="ir.ui.view">
+		<field name="name">form_restrict.button</field>
+		<field name="model">restrict.button</field>
+		<field name="arch" type="xml">
+			<form string="Button Restrictions">
+				<div class="alert alert-info" role="alert">
+					
+					<div class="row">
+						<div class="col-8">
+							<h4>To prevent user(s) to access buttons.</h4>
+							<p>You can turn on debug mode and hover to the button, and you'll get button name and type.</p>
+							<ul>
+								<li>Model : The "Model" button is used to restrict the functionality of the model.</li>
+								<li>User(s): To prevent from excecuting that button.</li>
+								<li>Button Name : Method Name (Example : action_confirm)</li>
+								<li>Button Type : Based on mentioned type on button while hover.</li>
+							</ul>
+						</div>
+						<div class="col-4">
+							<img class="img img-responsive float-right" src="/iwesabe_button_restriction/static/description/2023-05-25_12-31.png" style="max-height: 120px;" />
+							<img class="img img-responsive float-right" src="/iwesabe_button_restriction/static/description/2023-05-25_12-23.png" style="max-height: 120px;" />
+						</div>
+					</div>
+					
+				</div>
+				<sheet>
+					<group>
+						<group>
+							<field name="ir_model_id" required="1" />
+							<field name="user_ids" widget="many2many_tags" required="1" />
+						</group>
+						<group>
+							<field name="button_type" required="1" />
+							<field name="button_name" required="1" string="Method" attrs="{'invisible':[('button_type','=','action')]}"/>
+							<field name="button_name" required="1" string="Action ID" attrs="{'invisible':[('button_type','=','object')]}"/>
+						</group>
+						<label for="validation_msg" />
+						<field name="validation_msg" required="1" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="action_restrict_button" model="ir.actions.act_window">
+		<field name="name">Button Restrictions</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">restrict.button</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+	<menuitem id="menu_restrict_button" action="action_restrict_button" name="Button Restrictions" parent="base.menu_users" />
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_ui_button_action" model="ir.actions.act_window">
+        <field name="name">Buttons</field>
+        <field name="res_model">ir.ui.button</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="ir_ui_button_menu" action="ir_ui_button_action" name="Buttons"
+              parent="user_access_manager_first_level_menu" sequence="3"/>
+</odoo>
