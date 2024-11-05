@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 
 class IrUiButton(models.Model):
+    """records of buttons iin all views"""
     _name = 'ir.ui.button'
 
     name = fields.Char(required=True)
