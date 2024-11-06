@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_ui_notebook_page_action" model="ir.actions.act_window">
+        <field name="name">Notebook Page</field>
+        <field name="res_model">ir.ui.notebook.page</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="ir_ui_notebook_page_menu" action="ir_ui_notebook_page_action" name="Notebook Page"
+              parent="user_access_manager_first_level_menu" sequence="4"/>
+</odoo>

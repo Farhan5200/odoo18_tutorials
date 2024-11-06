@@ -32,9 +32,12 @@
                             <field name="hide_buttons_tab_ids">
                                 <list editable="bottom">
                                     <field name="model_id"/>
-                                    <field name="button_ids" invisible="1" nolabel="1"/>
-                                    <field name="button_id" domain="[('id', 'in', button_ids)]"
-                                           options="{'no_create' : True}"/>
+                                    <field name="button_dynamic_ids" invisible="1" nolabel="1"/>
+                                    <field name="button_ids" domain="[('id', 'in', button_dynamic_ids)]"
+                                           options="{'no_create' : True}" widget="many2many_tags"/>
+                                    <field name="tab_dynamic_ids" invisible="1" nolabel="1"/>
+                                    <field name="tab_ids" domain="[('id', 'in', tab_dynamic_ids)]"
+                                           options="{'no_create' : True}" widget="many2many_tags"/>
                                 </list>
                             </field>
                         </page>

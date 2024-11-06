@@ -5,10 +5,12 @@ from bs4 import BeautifulSoup
 
 
 class IrUiButton(models.Model):
-    """records of buttons iin all views"""
+    """records of buttons in all views"""
     _name = 'ir.ui.button'
+    _description = 'Ir Ui Button'
 
     name = fields.Char(required=True)
+    string = fields.Char()
     type = fields.Selection([('object', 'Object'), ('action', 'Action')])
     method = fields.Char()
     model = fields.Char()
@@ -25,9 +27,9 @@ class IrUiButton(models.Model):
                 for i in buttons:
                     values = i.attrs
                     if 'name' in values.keys() and 'string' in values.keys() and 'type' in values.keys():
-                        print(values)
                         self.env['ir.ui.button'].create({
                             'name': f"{values['string']} ({values['name']})",
+                            'string': values['string'],
                             'method': values['name'],
                             'type': values['type'],
                             'model': rec.model,

@@ -4,6 +4,7 @@ from odoo import api,fields,models
 
 class UserProfile(models.Model):
     _name = 'user.profile'
+    _description = 'User Profile'
 
     name = fields.Char()
     user_ids = fields.Many2many('res.users')

@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
-from odoo import api,fields,models
-import xml.etree.ElementTree as ET
 
-from bs4 import BeautifulSoup
+from odoo import api, fields, models
 
 
 class AccessManager(models.Model):
     _name = 'access.manager'
+    _description = 'Access Manger'
     _inherit = 'mail.thread'
 
     name = fields.Char(required=True)
     company_ids = fields.Many2many('res.company')
     user_profile_ids = fields.Many2many('user.profile')
     menu_ids = fields.Many2many('ir.ui.menu')
-    hide_buttons_tab_ids = fields.One2many('hide.buttons.tab','access_manager_id')
+    hide_buttons_tab_ids = fields.One2many('hide.buttons.tab', 'access_manager_id')
     is_debug = fields.Boolean()
     is_chatter = fields.Boolean()
 
-
     def hide_menus(self):
+        """to hide menus"""
         for rec in self.menu_ids:
             for groups in rec.groups_id:
                 for records in self.user_profile_ids:
@@ -26,37 +25,84 @@ class AccessManager(models.Model):
                         if groups.id == profile_groups.id:
                             rec.groups_id = [fields.Command.unlink(groups.id)]
 
-
-    # def hide_buttons(self):
-    #     root = ET.fromstring(self.hide_buttons_tab_ids.button_id.view_id.arch_db)
-    #     tree = ET.ElementTree(root).getroot()
-    #     for i in ET.fromstring(self.hide_buttons_tab_ids.button_id.view_id.arch_db).iter('button'):
-    #         if i.attrib['name'] == 'action_create_invoice':
-    #             i.set('invisible','1')
-    #             modified_xml_string = ET.tostring(i, encoding='UTF-8')
-    #             print(self.hide_buttons_tab_ids.button_id.view_id.arch_db)
-
     @api.model
     def check_user_for_debug(self):
+        """to restrict debug mode for groups in profile"""
         access_records = self.search([('is_debug', '=', True)])
         for access in access_records:
-            for rec in access.user_profile_ids:
-                for records in rec.group_ids:
-                    if self.env.user.id in records.users.ids:
-                        return True
+            if access.company_ids:
+                if self.env.company.id in access.company_ids.ids:
+                    for rec in access.user_profile_ids:
+                        for records in rec.group_ids:
+                            if self.env.user.id in records.users.ids:
+                                return True
+            else:
+                for rec in access.user_profile_ids:
+                    for records in rec.group_ids:
+                        if self.env.user.id in records.users.ids:
+                            return True
 
     @api.model
     def check_user_for_chatter(self):
-        print('kkijiiji')
+        """to hide chatter for groups in profile"""
         access_records = self.search([('is_chatter', '=', True)])
         for access in access_records:
-            for rec in access.user_profile_ids:
-                for records in rec.group_ids:
-                    if self.env.user.id in records.users.ids:
-                        print('vcuuu')
-                        return True
+            if access.company_ids:
+                if self.env.company.id in access.company_ids.ids:
+                    for rec in access.user_profile_ids:
+                        for records in rec.group_ids:
+                            if self.env.user.id in records.users.ids:
+                                return True
+            else:
+                for rec in access.user_profile_ids:
+                    for records in rec.group_ids:
+                        if self.env.user.id in records.users.ids:
+                            return True
+
+    @api.model
+    def hide_buttons_tab(self,model):
+        """to hide button and tab for groups in profile"""
+        button = {}
+        tab = {}
+        button_string = []
+        button_name = []
+        tab_string = []
+        for records in self.env['hide.buttons.tab'].search([('model_id.model', '=', model)]):
+            for access in records.access_manager_id:
+                if access.company_ids:
+                    if self.env.company.id in access.company_ids.ids:
+                        for profile in access.user_profile_ids:
+                            for group in profile.group_ids:
+                                if self.env.user.id in group.users.ids:
+                                    for rec in records.button_ids:
+                                        button_string.append(rec.string)
+                                        button_name.append(rec.method)
+                                    for rec in records.tab_ids:
+                                        tab_string.append(rec.name)
+                else:
+                    for profile in access.user_profile_ids:
+                        for group in profile.group_ids:
+                            if self.env.user.id in group.users.ids:
+                                for rec in records.button_ids:
+                                    button_string.append(rec.string)
+                                    button_name.append(rec.method)
+                                for rec in records.tab_ids:
+                                    tab_string.append(rec.name)
+
+        button['button_string'] = button_string
+        button['button_name'] = button_name
+        tab['tab_string'] = tab_string
+
+        return {
+            'button':button,
+            'tab':tab,
+        }
+
+
+
 
     def action_apply_changes(self):
         print('hi')
         # self.hide_menus()
-        # self.hide_buttons()
+        # self.check_user_for_chatter()
+
