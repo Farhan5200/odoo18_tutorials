@@ -15,6 +15,7 @@ class AccessManager(models.Model):
     hide_buttons_tab_ids = fields.One2many('hide.buttons.tab', 'access_manager_id')
     is_debug = fields.Boolean()
     is_chatter = fields.Boolean()
+    field_access_ids = fields.One2many('field.access', 'access_manager_id')
 
     def hide_menus(self):
         """to hide menus"""
@@ -98,6 +99,38 @@ class AccessManager(models.Model):
             'tab':tab,
         }
 
+    @api.model
+    def field_hide(self,model):
+        field_hide = []
+        field_readonly = []
+        for records in self.env['field.access'].search([('model_id.model', '=', model)]):
+            for access in records.access_manager_id:
+                if access.company_ids:
+                    if self.env.company.id in access.company_ids.ids:
+                        for profile in access.user_profile_ids:
+                            for group in profile.group_ids:
+                                if self.env.user.id in group.users.ids:
+                                    if records._is_invisible:
+                                        for rec in records.field_ids:
+                                            field_hide.append(rec.name)
+                                    if records._is_readonly:
+                                        for rec in records.field_ids:
+                                            field_readonly.append(rec.name)
+
+                else:
+                    for profile in access.user_profile_ids:
+                        for group in profile.group_ids:
+                            if self.env.user.id in group.users.ids:
+                                if records._is_invisible:
+                                    for rec in records.field_ids:
+                                        field_hide.append(rec.name)
+                                if records._is_readonly:
+                                    for rec in records.field_ids:
+                                        field_readonly.append(rec.name)
+        return {
+            'field_hide':field_hide,
+            'field_readonly':field_readonly,
+        }
 
 
 

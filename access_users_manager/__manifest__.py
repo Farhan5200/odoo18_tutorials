@@ -17,6 +17,7 @@
             'access_users_manager/static/src/js/loading_indicator.js',
             # 'access_users_manager/static/src/js/form_arch_parser.js',
             'access_users_manager/static/src/js/form_controller.js',
+            # 'access_users_manager/static/src/js/field.js',
         ],
     },
     'application': True,

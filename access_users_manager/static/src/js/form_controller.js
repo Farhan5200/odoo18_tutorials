@@ -35,6 +35,18 @@ patch(FormController.prototype, {
                         }
                     }
                 });
+                //alter field
+                const field_spec = await this.orm.call('access.manager','field_hide', [this.props.resModel],{});//returns all the fields that need to be hidden
+                this.archInfo.xmlDoc.querySelectorAll('field').forEach(function(i) {
+                    if (i.attributes.name){
+                        if(field_spec.field_hide.includes(i.attributes.name.value)){
+                            i.setAttribute("invisible", "1")
+                        }
+                        if(field_spec.field_readonly.includes(i.attributes.name.value)){
+                            i.setAttribute("style","pointer-events: none;")
+                        }
+                    }
+                });
             });
         return complete
     },

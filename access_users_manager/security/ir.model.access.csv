@@ -5,3 +5,4 @@ access_access_manager,access.access.manager,model_access_manager,base.group_user
 access_hide_buttons_tab,access.hide.buttons.tab,model_hide_buttons_tab,base.group_user,1,1,1,1
 access_ir_ui_button,access.ir.ui.button,model_ir_ui_button,base.group_user,1,1,1,1
 access_ir_ui_notebook_page,access.ir.ui.notebook.page,model_ir_ui_notebook_page,base.group_user,1,1,1,1
+access_field_access,access.field.access,model_field_access,base.group_user,1,1,1,1
